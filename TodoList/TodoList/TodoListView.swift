@@ -13,31 +13,36 @@ struct TodoListView: View {
     
     var body: some View {
         VStack {
-            Image("todo-list")
-            Section {
+            Form {
+                Image("todo-list")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 85, height: 85)
+                    .frame(maxWidth: .infinity, alignment: .center)
                 HStack {
                     TextField("What do you need to get done?", text: $newTodoTitle)
                     Button(action: addTodo) {
                         Text("Add")
                     }
                 }
-            }
-            List {
-                Section {
-                    ForEach(todos) { todo in
-                        HStack {
-                            Toggle(isOn: Binding(
-                                get: { todo.isCompleted },
-                                set: { newValue in
-                                    self.toggleTodoCompleted(todo: todo)
+                List {
+                    Section {
+                        ForEach(todos) { todo in
+                            HStack {
+                                Toggle(isOn: Binding(
+                                    get: { todo.isCompleted },
+                                    set: { newValue in
+                                        self.toggleTodoCompleted(todo: todo)
+                                    }
+                                )) {
+                                    Text(todo.title)
                                 }
-                            )) {
-                                Text(todo.title)
                             }
                         }
+                        .onDelete(perform: deleteTodo)
                     }
-                    .onDelete(perform: deleteTodo)
                 }
+                
             }
         }
         .padding()
